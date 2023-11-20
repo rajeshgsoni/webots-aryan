@@ -14,9 +14,6 @@ BaseRobot::BaseRobot()
     receiver->enable(TIME_STEP);
 }
 
-BaseRobot::~BaseRobot() {
-    // Destructor implementation, if needed
-}
 
 void BaseRobot::sendMessage(const std::string& ID, const std::string& data0, const std::string& data1) {
     std::cout << "Sending message to " << ID << std::endl;

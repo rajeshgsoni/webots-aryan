@@ -4,6 +4,7 @@
 #include <webots/Camera.hpp>
 #include <webots/Receiver.hpp>
 
+
 using namespace webots;
 
 class ScoutRobot : public Robot {
@@ -24,7 +25,7 @@ public:
 private:
   void receiveCommandsFromLeader() {
       // Example: Receiving data from Leader Robot
-      auto receiver = getReceiver("myReceiver");
+      auto receiver = getReceiver("receiver");
       receiver->enable(TIME_STEP);
   
       if (receiver->getQueueLength() > 0) {
@@ -46,8 +47,8 @@ private:
       // Actual implementation will depend on your robot's capabilities and tasks
   
       // Move towards a target - placeholder logic
-      auto leftMotor = getMotor("leftWheelMotor");
-      auto rightMotor = getMotor("rightWheelMotor");
+      auto leftMotor = getMotor("front left wheel motor");
+      auto rightMotor = getMotor("front right wheel motor");
       leftMotor->setPosition(10.0);   // Example values
       rightMotor->setPosition(10.0);  // Example values
   
