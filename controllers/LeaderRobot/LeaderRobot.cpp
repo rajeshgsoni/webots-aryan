@@ -3,6 +3,7 @@
 #include <webots/Motor.hpp>
 #include "../BaseRobot/BaseRobot.hpp"
 #include <iostream>
+#include <fstream>
 
 using namespace webots;
 
@@ -26,6 +27,20 @@ public:
         rearLeftMotor->setPosition(INFINITY);
         rearRightMotor->setPosition(INFINITY);
     }
+    
+void logEvent(const std::string& message) {
+    std::ofstream outputFile;
+    outputFile.open("output.txt", std::ios::app); // Open in append mode
+
+    if (outputFile.is_open()) {
+        outputFile << message << std::endl; // Append message to file
+        std::cout << message << std::endl;   // Also print to terminal
+        outputFile.close();                  // Close the file
+    } else {
+        std::cerr << "Unable to open output.txt for logging." << std::endl;
+    }
+}
+    
 
     void run() {
     
@@ -47,28 +62,61 @@ private:
     Lidar *lidar;
     Motor *frontLeftMotor, *frontRightMotor, *rearLeftMotor, *rearRightMotor;
 
-    void scanEnvironmentAndDetectOOIs() {
+
+void scanEnvironmentAndDetectOOIs() {
     const float *lidarValues = lidar->getRangeImage();
     int numberOfPoints = lidar->getNumberOfPoints();
-    
+    double fieldOfView = lidar->getFov();
+    double angleIncrement = fieldOfView / numberOfPoints;
 
-   //std::cout << "numberOfPoints: " << numberOfPoints << std::endl;
-
-    // Process LiDAR data to detect OOIs
+    std::vector<std::pair<double, double>> points;
     for (int i = 0; i < numberOfPoints; ++i) {
         float range = lidarValues[i];
-        
-        if (range < 0.5) {
-            // Object detected, process accordingly
-            std::cout << "Object detected. Range: " << range << std::endl;
-
+        if (range < 1.0) {
+            double angle = -fieldOfView / 2 + i * angleIncrement;
+            points.push_back({range * cos(angle), range * sin(angle)});
         }
-
-        // Analyze range data to find OOIs
     }
 
-        // Once OOIs are detected, handle their data (e.g., store positions)
+    // Basic clustering
+    std::vector<std::pair<double, double>> oois;
+    double clusterThreshold = 0.2; // Threshold to consider points in the same cluster
+    for (int i = 0; i < points.size(); ++i) {
+        if (i == 0 || (sqrt(pow(points[i].first - points[i-1].first, 2) + 
+                          pow(points[i].second - points[i-1].second, 2)) > clusterThreshold)) {
+            oois.push_back(points[i]);
+        }
     }
+
+    // Log OOIs
+    for (const auto& ooi : oois) {
+        logEvent("OOI discovered at x:" + std::to_string(ooi.first) + " y:" + std::to_string(ooi.second));
+    }
+}
+
+
+
+
+    void old_scanEnvironmentAndDetectOOIs() {
+      const float *lidarValues = lidar->getRangeImage();
+      int numberOfPoints = lidar->getNumberOfPoints();
+      double fieldOfView = lidar->getFov();
+      double angleIncrement = fieldOfView / numberOfPoints;
+  
+      for (int i = 0; i < numberOfPoints; ++i) {
+          float range = lidarValues[i];
+          double angle = -fieldOfView / 2 + i * angleIncrement;
+  
+          double x = range * cos(angle);
+          double y = range * sin(angle);
+  
+          if (range < 0.5) {  // Threshold for object detection
+              std::cout << "Object detected at x: " << x << ", y: " << y << std::endl;
+              //logEvent("OOI discovered at x:" + std::to_string(x) + " y:" + std::to_string(y));
+          }
+      }
+  }
+  
 
 };
 
