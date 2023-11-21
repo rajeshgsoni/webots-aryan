@@ -3,26 +3,32 @@
 #include <webots/Motor.hpp>
 #include <webots/Camera.hpp>
 #include <webots/Receiver.hpp>
+#include "../BaseRobot/BaseRobot.hpp"
 
 
 using namespace webots;
 
-class ScoutRobot : public Robot {
+class ScoutRobot : public BaseRobot {
 static constexpr int TIME_STEP = 64; // Adjust this value as needed for your simulation
 
 public:
     ScoutRobot() {
         // Initialize sensors and actuators
+        
     }
 
     void run() {
+    
+            std::cout << "ScoutRobot run" << std::endl;
+
         while (step(TIME_STEP) != -1) {
             receiveCommandsFromLeader();
-            exploreAndReport();
+            //exploreAndReport();
         }
     }
 
 private:
+
   void receiveCommandsFromLeader() {
       // Example: Receiving data from Leader Robot
       auto receiver = getReceiver("receiver");
@@ -58,6 +64,13 @@ private:
       // Similar to sending commands, use an Emitter to send data back
   }
   
+   void move(double speed) override {
+        // Implementation of the move method specific to LeaderRobot
+    }
+
+    void rotate(double speed) override {
+        // Implementation of the rotate method specific to LeaderRobot
+    }  
     // Add other private members and methods as needed
 };
 

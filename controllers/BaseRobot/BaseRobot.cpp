@@ -15,6 +15,11 @@ BaseRobot::BaseRobot()
 }
 
 
+BaseRobot::~BaseRobot(){
+
+}
+
+
 void BaseRobot::sendMessage(const std::string& ID, const std::string& data0, const std::string& data1) {
     std::cout << "Sending message to " << ID << std::endl;
     std::string message{};

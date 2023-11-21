@@ -4,11 +4,13 @@
 #include "../BaseRobot/BaseRobot.hpp"
 #include <iostream>
 #include <fstream>
+#include <webots/Emitter.hpp>
 
 using namespace webots;
 
-class LeaderRobot : public Robot {
+class LeaderRobot : public BaseRobot {
     static constexpr int TIME_STEP = 64; // Adjust this value as needed for your simulation
+  webots::Emitter *emitter;
 
 public:
     LeaderRobot() {
@@ -43,20 +45,28 @@ void logEvent(const std::string& message) {
     
 
     void run() {
-    
-lidar->enablePointCloud();
+        
+        lidar->enablePointCloud();
 
         std::cout << "LeaderRobot run method is called" << std::endl;
         
-                while (step(TIME_STEP) != -1) {
+        while (step(TIME_STEP) != -1) {
         //std::cout << "LeaderRobot run method is called" << std::endl;                
-        scanEnvironmentAndDetectOOIs();        
+            scanEnvironmentAndDetectOOIs();        
         }
 
 
 
         // Implement other LeaderRobot specific behaviors here
     }
+    
+  void move(double speed) override {
+        // Implementation of the move method specific to LeaderRobot
+    }
+
+    void rotate(double speed) override {
+        // Implementation of the rotate method specific to LeaderRobot
+    }  
 
 private:
     Lidar *lidar;
@@ -72,7 +82,7 @@ void scanEnvironmentAndDetectOOIs() {
     std::vector<std::pair<double, double>> points;
     for (int i = 0; i < numberOfPoints; ++i) {
         float range = lidarValues[i];
-        if (range < 1.0) {
+        if (range < 0.3) {
             double angle = -fieldOfView / 2 + i * angleIncrement;
             points.push_back({range * cos(angle), range * sin(angle)});
         }
@@ -80,8 +90,8 @@ void scanEnvironmentAndDetectOOIs() {
 
     // Basic clustering
     std::vector<std::pair<double, double>> oois;
-    double clusterThreshold = 0.2; // Threshold to consider points in the same cluster
-    for (int i = 0; i < points.size(); ++i) {
+    double clusterThreshold = 10; // Threshold to consider points in the same cluster
+    for (std::vector<std::pair<double, double>>::size_type i = 0; i < points.size(); ++i) {
         if (i == 0 || (sqrt(pow(points[i].first - points[i-1].first, 2) + 
                           pow(points[i].second - points[i-1].second, 2)) > clusterThreshold)) {
             oois.push_back(points[i]);
@@ -90,33 +100,22 @@ void scanEnvironmentAndDetectOOIs() {
 
     // Log OOIs
     for (const auto& ooi : oois) {
-        logEvent("OOI discovered at x:" + std::to_string(ooi.first) + " y:" + std::to_string(ooi.second));
+    
+        //logEvent("OOI discovered at x:" + std::to_string(ooi.first) + " y:" + std::to_string(ooi.second));
+
+        // Example of sending a message to a Scout Robot
+        // You'll replace 'targetX', 'targetY', and 'scoutID' with actual values
+        double targetX = ooi.first; // X coordinate of target
+        double targetY = ooi.second; // Y coordinate of target
+        std::string scoutID = "1"; // ID of the Scout Robot to send the message to
+
+        sendMessage(scoutID, std::to_string(targetX), std::to_string(targetY));
+        
     }
 }
 
 
 
-
-    void old_scanEnvironmentAndDetectOOIs() {
-      const float *lidarValues = lidar->getRangeImage();
-      int numberOfPoints = lidar->getNumberOfPoints();
-      double fieldOfView = lidar->getFov();
-      double angleIncrement = fieldOfView / numberOfPoints;
-  
-      for (int i = 0; i < numberOfPoints; ++i) {
-          float range = lidarValues[i];
-          double angle = -fieldOfView / 2 + i * angleIncrement;
-  
-          double x = range * cos(angle);
-          double y = range * sin(angle);
-  
-          if (range < 0.5) {  // Threshold for object detection
-              std::cout << "Object detected at x: " << x << ", y: " << y << std::endl;
-              //logEvent("OOI discovered at x:" + std::to_string(x) + " y:" + std::to_string(y));
-          }
-      }
-  }
-  
 
 };
 
