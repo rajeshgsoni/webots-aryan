@@ -22,30 +22,36 @@ public:
             std::cout << "ScoutRobot run" << std::endl;
 
         while (step(TIME_STEP) != -1) {
-            receiveCommandsFromLeader();
+            //receiveCommandsFromLeader();
+            receiveMessage();
             //exploreAndReport();
         }
     }
 
 private:
-
-  void receiveCommandsFromLeader() {
-      // Example: Receiving data from Leader Robot
-      auto receiver = getReceiver("receiver");
-      receiver->enable(TIME_STEP);
-  
-      if (receiver->getQueueLength() > 0) {
-          const char *data = (const char *)receiver->getData();
-          
-        // Example of processing the received data
-        // The actual processing will depend on the format and content of your data
+/*
+void receiveCommandsFromLeader() {
+    if (receiver->getQueueLength() > 0) {
+        const char *data = (const char *)receiver->getData();
         std::string receivedData(data);
-        std::cout << "Received data: " << receivedData << std::endl;
-          
-          // Process the received data
-          receiver->nextPacket();
-      }
-  }
+        receiver->nextPacket();
+
+        std::istringstream iss(receivedData);
+        std::string targetScoutID, targetX, targetY;
+        if (std::getline(iss, targetScoutID, '|') &&
+            std::getline(iss, targetX, '|') &&
+            std::getline(iss, targetY, '|')) {
+
+            if (targetScoutID == this->ID) {
+                std::cout << "Received command for this Scout. X: " << targetX << ", Y: " << targetY << std::endl;
+                // Process the command, move towards the target, etc.
+            } else {
+                std::cout << "Command for another Scout. Ignored." << std::endl;
+            }
+        }
+    }
+}
+  */
   
   void exploreAndReport() {
       // Example: Navigate and perform tasks, then report back

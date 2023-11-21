@@ -32,27 +32,37 @@ void BaseRobot::sendMessage(const std::string& ID, const std::string& data0, con
 }
 
 std::pair<std::string, std::string> BaseRobot::receiveMessage() {
+    //std::cout << "Checking receiver queue..." << std::endl;
     if (receiver->getQueueLength() > 0) {
+        //std::cout << "Message received. Queue length: " << receiver->getQueueLength() << std::endl;
+
         std::string message{ static_cast<const char*>(receiver->getData()) };
+        //std::cout << "Raw message: " << message << std::endl;
+
         receiver->nextPacket();
 
         std::istringstream iss{ message };
         std::string incomingId{};
         std::getline(iss, incomingId, '|');
 
+        std::cout << "Incoming ID: " << incomingId << std::endl;
         if (ID.compare(incomingId) == 0) {
-            // ID matches, now extract data0 and data1
+            std::cout << "ID matches. Processing message..." << std::endl;
             std::string data0{};
             std::string data1{};
             if (std::getline(iss, data0, '|') && std::getline(iss, data1, '|')) {
                 std::cout << "Received message with matching ID: " << message << std::endl;
                 return std::make_pair(data0, data1);
             }
+        } else {
+            std::cout << "Msg for ID # " << incomingId << " does not match my ID # " << ID << "! Ignoring message..." << std::endl;
         }
+    } else {
+        //std::cout << "No messages in receiver queue." << std::endl;
     }
-    // If the ID doesn't match or the format is incorrect, return an empty pair
     return std::make_pair("", "");
 }
+
 
 // Implementations for virtual functions
 void BaseRobot::run() {
