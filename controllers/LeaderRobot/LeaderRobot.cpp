@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <webots/Emitter.hpp>
+#include <set>
 
 using namespace webots;
 
@@ -66,11 +67,29 @@ void logEvent(const std::string& message) {
 
     void rotate(double speed) override {
         // Implementation of the rotate method specific to LeaderRobot
-    }  
+    } 
+    
+    void stop() {
+    std::cout << "Stopping all motors." << std::endl;
+
+    auto frontLeftMotor = getMotor("front left wheel motor");
+    auto frontRightMotor = getMotor("front right wheel motor");
+    auto rearLeftMotor = getMotor("rear left wheel motor");
+    auto rearRightMotor = getMotor("rear right wheel motor");
+
+    frontLeftMotor->setVelocity(0);
+    frontRightMotor->setVelocity(0);
+    rearLeftMotor->setVelocity(0);
+    rearRightMotor->setVelocity(0);
+
+    std::cout << "All motors stopped." << std::endl;
+}
+
 
 private:
     Lidar *lidar;
     Motor *frontLeftMotor, *frontRightMotor, *rearLeftMotor, *rearRightMotor;
+    std::set<std::pair<double, double>> dispatchedOOIs;  // To track dispatched OOIs
 
 
 void scanEnvironmentAndDetectOOIs() {
@@ -98,20 +117,28 @@ void scanEnvironmentAndDetectOOIs() {
         }
     }
 
-    // Log OOIs
-    for (const auto& ooi : oois) {
+
+ for (const auto& ooi : oois) {
+        // Check if this OOI has already been dispatched
+        if (dispatchedOOIs.find(ooi) == dispatchedOOIs.end()) {
+            // OOI not yet dispatched, send message
+            double targetX = ooi.first;
+            double targetY = ooi.second;
+            std::string scoutID = "1";
+
+            sendMessage(scoutID, std::to_string(targetX), std::to_string(targetY));
+            dispatchedOOIs.insert(ooi);  // Mark this OOI as dispatched
+            std::cout << "Calling STOP." << std::endl;
     
-        //logEvent("OOI discovered at x:" + std::to_string(ooi.first) + " y:" + std::to_string(ooi.second));
-
-        // Example of sending a message to a Scout Robot
-        // You'll replace 'targetX', 'targetY', and 'scoutID' with actual values
-        double targetX = ooi.first; // X coordinate of target
-        double targetY = ooi.second; // Y coordinate of target
-        std::string scoutID = "1"; // ID of the Scout Robot to send the message to
-
-        sendMessage(scoutID, std::to_string(targetX), std::to_string(targetY));
-        
+            stop();
+            
+            
+            
+            break;
+                
+        }
     }
+    
 }
 
 
