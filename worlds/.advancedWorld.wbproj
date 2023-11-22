@@ -5,7 +5,7 @@ sceneTreePerspectives: 000000ff000000010000000300000022000002fb000000fa010000000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 1 "controllers/LeaderRobot/LeaderRobot.cpp" "controllers/ScoutController/ScoutController.cpp" "controllers/BaseRobot/BaseRobot.cpp"
+textFiles: 1 "controllers/LeaderRobot/LeaderRobot.cpp" "controllers/ScoutController/ScoutController.cpp" "controllers/BaseRobot/BaseRobot.cpp" "controllers/BaseRobot/BaseRobot.hpp"
 globalOptionalRendering: Skeleton::PenPaintingRays::RadarFrustums::LightSensorRays::RangeFinderFrustums::ContactPoints::CoordinateSystem
 consoles: Console:All:All
 renderingDevicePerspectives: 0:camera depth;1;0.8;0;0

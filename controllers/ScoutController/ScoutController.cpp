@@ -14,6 +14,14 @@ static constexpr int TIME_STEP = 64; // Adjust this value as needed for your sim
 public:
     ScoutRobot() {
         // Initialize sensors and actuators
+        gps = getGPS("gps");
+        gps->enable(TIME_STEP);
+        outputGPSPosition();
+
+
+    compass = getCompass("compass");
+    compass->enable(TIME_STEP);
+
         
         
     }
@@ -30,10 +38,13 @@ public:
                 // Parse target coordinates
                 double targetX = std::stod(message.first);
                 double targetY = std::stod(message.second);
+                
+                targetPositionX = targetX;
+                targetPositionY = targetY;
                 std::cout << "Moving to target X: " << targetX << ", Y: " << targetY << std::endl;
 
                 // Move to target, assuming a stop distance (adjust as needed)
-                double stopDistance = 3;  // Example stop distance
+                stopDistance = 1;  // Example stop distance
                 if (moveToTarget(targetX, targetY, stopDistance)) {
                     std::cout << "Reached target." << std::endl;
                 }
@@ -43,6 +54,9 @@ public:
                 std::cerr << "Target coordinates out of range: " << e.what() << std::endl;
             }
         }
+        
+        outputGPSPosition();
+        moveToTarget(targetPositionX, targetPositionY, stopDistance);
 
         // Add additional tasks or methods to explore and report
         // exploreAndReport();
@@ -56,11 +70,13 @@ bool moveToTarget(double targetX, double targetY, double stopDistance) {
     // updateCurrentPosition();  // Assuming this function updates currentPositionX and currentPositionY
     
    std::cout << "ScoutRobot moveToTarget" << std::endl;
+    updateCurrentPosition();  // Update GPS and compass data
 
     double deltaX = targetX - currentPositionX;
     double deltaY = targetY - currentPositionY;
     double distanceToTarget = sqrt(deltaX * deltaX + deltaY * deltaY);
 
+    std::cout << "deltaX" << deltaX << ", deltaY " << deltaY << " distanceToTarget " << distanceToTarget << std::endl;    
 
     if (distanceToTarget <= stopDistance) {
        std::cout << "Stopping movement" << std::endl;
@@ -70,7 +86,7 @@ bool moveToTarget(double targetX, double targetY, double stopDistance) {
 
     double angleToTarget = atan2(deltaY, deltaX);
     moveTowards(angleToTarget);
-    std::cout << "Moving towards angleToTarget " << angleToTarget << ", distanceToTarget " << distanceToTarget  << std::endl;    
+    std::cout << "Moving towards deltaX" << deltaX << ", deltaY " << deltaY << " angleToTarget " << angleToTarget << ", distanceToTarget " << distanceToTarget  << std::endl;    
 
     return false;  // Target not yet reached
 }

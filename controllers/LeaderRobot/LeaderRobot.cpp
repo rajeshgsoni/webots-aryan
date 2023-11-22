@@ -112,20 +112,14 @@ private:
     Lidar *lidar;
     Motor *frontLeftMotor, *frontRightMotor, *rearLeftMotor, *rearRightMotor;
     std::set<std::pair<double, double>> dispatchedOOIs;  // To track dispatched OOIs
-    webots::GPS *gps;
-    webots::Compass *compass;
-    double currentPositionX;
-    double currentPositionY;
+    //webots::GPS *gps;
+    //webots::Compass *compass;
+    //double currentPositionX;
+    //double currentPositionY;
     double currentYaw;
 
 
-void outputGPSPosition() {
-        const double *gpsValues = gps->getValues();
-        std::cout << "GPS Position: X = " << gpsValues[0]
-                  << ", Y = " << gpsValues[1]
-                  << ", Z = " << gpsValues[2] << std::endl;
-    }
-    
+   
     
 bool scanEnvironmentAndDetectOOIs() {
     const float *lidarValues = lidar->getRangeImage();
@@ -162,16 +156,6 @@ bool scanEnvironmentAndDetectOOIs() {
     return true;
 }
 
-void updateCurrentPosition() {
-    const double *gpsValues = gps->getValues();
-    currentPositionX = gpsValues[0];
-    currentPositionY = gpsValues[1];  // Depending on your coordinate system, this might be gpsValues[1]
-
-    const double *compassValues = compass->getValues();
-    currentYaw = atan2(compassValues[0], compassValues[1]);
-
-    std::cout << "Current position updated: X = " << currentPositionX << ", Y = " << currentPositionY << ", Yaw = " << currentYaw << std::endl;
-}
 
 
 };

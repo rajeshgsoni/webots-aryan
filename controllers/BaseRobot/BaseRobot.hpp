@@ -16,6 +16,8 @@
 #include <webots/Receiver.hpp>
 #include <webots/Emitter.hpp>
 #include <webots/Robot.hpp>
+#include <webots/GPS.hpp>
+#include <webots/Compass.hpp>
 
 constexpr int TIME_STEP{ 64 };
 
@@ -28,8 +30,10 @@ public:
     virtual void move(double speed) = 0;
     virtual void rotate(double speed) = 0;
 
+
     void keyboardControl();
     void updateCurrentPosition();
+    void outputGPSPosition();
     void setTargetPosition(double x, double y);
     bool moveToTarget(double stopDistance);
 
@@ -38,11 +42,15 @@ public:
 
 protected:
     std::string ID{};
+    webots::GPS *gps;
+    webots::Compass *compass;
+    
     double currentPositionX{};
     double currentPositionY{};
     double currentYaw{};
     double targetPositionX{};
     double targetPositionY{};
+    double stopDistance{};    
 
 private:
     std::unique_ptr<webots::Receiver> receiver{};

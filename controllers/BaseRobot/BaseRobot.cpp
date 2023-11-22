@@ -4,6 +4,7 @@
 // Author:        XXX XXX
 // zID:           z1234567
 // Modifications:
+#include <cmath>
 
 #include "BaseRobot.hpp"
 
@@ -18,6 +19,28 @@ BaseRobot::BaseRobot()
 BaseRobot::~BaseRobot(){
 
 }
+
+
+void BaseRobot::updateCurrentPosition() {
+    const double *gpsValues = gps->getValues();
+    currentPositionX = gpsValues[0];
+    currentPositionY = gpsValues[2];  // Adjust based on your coordinate system
+
+    const double *compassValues = compass->getValues();
+    currentYaw = atan2(compassValues[0], compassValues[1]);
+
+    // Optional: Print out the position for debugging
+    std::cout << "Current position: X = " << currentPositionX 
+              << ", Y = " << currentPositionY << ", Yaw = " << currentYaw << std::endl;
+}
+
+void BaseRobot::outputGPSPosition() {
+        const double *gpsValues = gps->getValues();
+        std::cout << "GPS Position: X = " << gpsValues[0]
+                  << ", Y = " << gpsValues[1]
+                  << ", Z = " << gpsValues[2] << std::endl;
+    }
+
 
 
 void BaseRobot::sendMessage(const std::string& ID, const std::string& data0, const std::string& data1) {
