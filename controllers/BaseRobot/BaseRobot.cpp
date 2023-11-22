@@ -45,9 +45,9 @@ std::pair<std::string, std::string> BaseRobot::receiveMessage() {
         std::string incomingId{};
         std::getline(iss, incomingId, '|');
 
-        std::cout << "Incoming ID: " << incomingId << std::endl;
+        //std::cout << "Incoming ID: " << incomingId << std::endl;
         if (ID.compare(incomingId) == 0) {
-            std::cout << "ID matches. Processing message..." << std::endl;
+            //std::cout << "ID matches. Processing message..." << std::endl;
             std::string data0{};
             std::string data1{};
             if (std::getline(iss, data0, '|') && std::getline(iss, data1, '|')) {
@@ -55,7 +55,7 @@ std::pair<std::string, std::string> BaseRobot::receiveMessage() {
                 return std::make_pair(data0, data1);
             }
         } else {
-            std::cout << "Msg for ID # " << incomingId << " does not match my ID # " << ID << "! Ignoring message..." << std::endl;
+            //std::cout << "Msg for ID # " << incomingId << " does not match my ID # " << ID << "! Ignoring message..." << std::endl;
         }
     } else {
         //std::cout << "No messages in receiver queue." << std::endl;

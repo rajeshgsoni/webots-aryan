@@ -9,7 +9,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.41943839093057417 -0.5884438124685999 0.6912346314971423 4.681689383397043
-  position 0.897503202629419 5.452829753974791 9.46547115958269
+  position 0.7338987412914451 6.01290671030399 9.162056668636508
 }
 TexturedBackground {
 }
@@ -24,8 +24,8 @@ RectangleArena {
   }
 }
 Robot {
-  translation 3.68214 2.1906 -0.00316386
-  rotation 0.00341362999729881 0.9998510348332723 -0.01691908014864304 0.07547784473646311
+  translation 3.8435161569306415 2.197060649487212 -0.0008169022088674177
+  rotation -0.05296686623955164 -0.11469928366516931 0.9919871901428258 0.054667780465628237
   children [
     Emitter {
     }
@@ -715,7 +715,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 2301.4324724507937
+        position 2305.158521750098
         axis 0 1 0
         anchor 0.05 0.11 0.043
         dampingConstant 5
@@ -733,7 +733,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.05 0.11 0.043
-        rotation 0 1 0 1.7866500230650884
+        rotation 0 1 0 5.512699322369211
         children [
           Pose {
             children [
@@ -817,7 +817,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 2301.430817670116
+        position 2305.1546030795585
         axis 0 1 0
         anchor 0.05 -0.11 0.043
         dampingConstant 5
@@ -835,7 +835,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.05 -0.11 0.043
-        rotation 0 1 0 1.7849952423874342
+        rotation 0 1 0 5.508780651829805
         children [
           Pose {
             rotation 0 0 1 3.141592
@@ -857,7 +857,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 2298.148551197599
+        position 2301.8659074081515
         axis 0 1 0
         anchor -0.055 0.11 0.043
         dampingConstant 5
@@ -874,8 +874,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.056542417843616466 0.10999974786357836 0.040537835165190717
-        rotation 5.721847899542769e-05 -0.9999999928767129 -0.0001047502738228544 1.4972712346924013
+        translation -0.05236566749179412 0.10999974786357836 0.04422539818601448
+        rotation -8.866693181910115e-05 0.999999995886865 -1.909044711780744e-05 2.22008498624049
         children [
           Pose {
             children [
@@ -890,7 +890,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 2298.19758240016
+        position 2301.9141540804494
         axis 0 1 0
         anchor -0.055 -0.11 0.043
         dampingConstant 5
@@ -908,7 +908,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.055 -0.11 0.043
-        rotation 0 -1 0 1.4482400275684784
+        rotation 0 1 0 2.2683316527207564
         children [
           Pose {
             rotation 0 0 1 3.141592
@@ -1183,8 +1183,8 @@ Robot {
   controller "LeaderRobot"
 }
 Robot {
-  translation 0.5000000000381959 0.5000000000628527 -6.396199560306133e-05
-  rotation 3.0002067950940354e-09 1.1526377457495235e-09 0.9999999999999999 0.7800000036094887
+  translation 3.26811 1.67948 -4.1717e-05
+  rotation 0.002036257486483597 -0.0020357743273414137 0.9999958546305764 1.570800461864758
   children [
     GPS {
     }
@@ -1196,7 +1196,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position -3.908326058009921e-09
+        position 554.9906555376809
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -1204,7 +1204,7 @@ Robot {
         RotationalMotor {
           name "left wheel motor"
           consumptionFactor -0.001
-          maxVelocity 6.28
+          maxVelocity 60.28
         }
         PositionSensor {
           name "left wheel sensor"
@@ -1212,8 +1212,8 @@ Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.02599999999999988 0.02
-        rotation 0 1 0 0
+        translation 0 0.025999999999999877 0.02
+        rotation 0 1 0 2.0703485058773268
         children [
           DEF EPUCK_WHEEL Pose {
             rotation 1 0 0 -1.570796
@@ -1349,7 +1349,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 5.80025136201493e-08
+        position 556.2947657440595
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -1357,7 +1357,7 @@ Robot {
         RotationalMotor {
           name "right wheel motor"
           consumptionFactor -0.001
-          maxVelocity 6.28
+          maxVelocity 60.28
         }
         PositionSensor {
           name "right wheel sensor"
@@ -1365,8 +1365,8 @@ Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.025999999999999926 0.02
-        rotation 0 1 0 5.960464477539063e-08
+        translation 0 -0.02599999999999988 0.02
+        rotation 0 1 0 3.3744587122559224
         children [
           Pose {
             rotation 1 0 0 3.14159
@@ -2768,8 +2768,8 @@ Robot {
   remoteControl "e-puck_bluetooth"
 }
 Robot {
-  translation 0.5000000001877093 -1.9865780251790333e-11 -6.396199560293817e-05
-  rotation 1.103748176280951e-08 -1.2560411141066114e-08 -0.9999999999999999 0.2000000064744394
+  translation 0.500000000187709 -1.986625657929841e-11 -6.396199560258255e-05
+  rotation 1.2017854809974603e-08 -2.789270532692464e-09 -0.9999999999999999 0.2000000028650226
   children [
     GPS {
     }
@@ -2781,7 +2781,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 1.199134422907578e-07
+        position 8.895797387994849e-08
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -2789,7 +2789,7 @@ Robot {
         RotationalMotor {
           name "left wheel motor"
           consumptionFactor -0.001
-          maxVelocity 6.28
+          maxVelocity 60.28
         }
         PositionSensor {
           name "left wheel sensor"
@@ -2798,7 +2798,7 @@ Robot {
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
         translation 0 0.02599999999999993 0.02
-        rotation 0 1 0 1.1920928955078128e-07
+        rotation 0 0.9999999999999999 0 8.940696716308595e-08
         children [
           DEF EPUCK_WHEEL Pose {
             rotation 1 0 0 -1.570796
@@ -2934,7 +2934,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 4.459247238039005e-09
+        position 3.541468358575656e-08
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -2942,7 +2942,7 @@ Robot {
         RotationalMotor {
           name "right wheel motor"
           consumptionFactor -0.001
-          maxVelocity 6.28
+          maxVelocity 60.28
         }
         PositionSensor {
           name "right wheel sensor"
@@ -2950,8 +2950,8 @@ Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.02599999999999988 0.02
-        rotation 0 1 0 0
+        translation 0 -0.025999999999999888 0.02
+        rotation 0 1 0 2.9802322387695313e-08
         children [
           Pose {
             rotation 1 0 0 3.14159
@@ -4353,8 +4353,8 @@ Robot {
   remoteControl "e-puck_bluetooth"
 }
 Robot {
-  translation 0.5000000001652889 -0.4999999996658124 -6.396199560297286e-05
-  rotation 7.993742137663774e-10 -1.2218207517355201e-09 -1 1.982297135816712
+  translation 0.5000000002039702 -0.49999999957717856 -6.396199560314286e-05
+  rotation 1.790661813728809e-09 -5.728630366534894e-10 -1 1.9822971358167116
   children [
     GPS {
     }
@@ -4366,7 +4366,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position -2.4318435332711835e-07
+        position -2.7413980740859115e-07
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -4374,7 +4374,7 @@ Robot {
         RotationalMotor {
           name "left wheel motor"
           consumptionFactor -0.001
-          maxVelocity 6.28
+          maxVelocity 60.28
         }
         PositionSensor {
           name "left wheel sensor"
@@ -4382,8 +4382,8 @@ Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.025999999999999853 0.02
-        rotation 0 -1 0 2.4394252216435837e-07
+        translation 0 0.025999999999999756 0.02
+        rotation 0 -1 0 2.7476383618393225e-07
         children [
           DEF EPUCK_WHEEL Pose {
             rotation 1 0 0 -1.570796
@@ -4519,7 +4519,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 4.460386883611819e-09
+        position -2.6495078434842434e-08
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -4527,7 +4527,7 @@ Robot {
         RotationalMotor {
           name "right wheel motor"
           consumptionFactor -0.001
-          maxVelocity 6.28
+          maxVelocity 60.28
         }
         PositionSensor {
           name "right wheel sensor"
@@ -4535,8 +4535,8 @@ Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.02599999999999988 0.02
-        rotation 0 1 0 0
+        translation 0 -0.025999999999999877 0.02
+        rotation 0 -1 0 2.9802322387695313e-08
         children [
           Pose {
             rotation 1 0 0 3.14159

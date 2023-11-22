@@ -6,18 +6,31 @@
 #include <fstream>
 #include <webots/Emitter.hpp>
 #include <set>
+#include <webots/GPS.hpp>
+#include <webots/Compass.hpp>
+#include <webots/Display.hpp>
 
 using namespace webots;
 
 class LeaderRobot : public BaseRobot {
     static constexpr int TIME_STEP = 64; // Adjust this value as needed for your simulation
   webots::Emitter *emitter;
+    webots::Display *display;
 
 public:
+
     LeaderRobot() {
         // Initialize sensors and actuators
         lidar = getLidar("lidar");
         lidar->enable(TIME_STEP);
+        
+        gps = getGPS("gps");
+        gps->enable(TIME_STEP);
+        outputGPSPosition();
+
+
+    compass = getCompass("compass");
+    compass->enable(TIME_STEP);
 
         frontLeftMotor = getMotor("front left wheel motor");
         frontRightMotor = getMotor("front right wheel motor");
@@ -50,10 +63,19 @@ void logEvent(const std::string& message) {
         lidar->enablePointCloud();
 
         std::cout << "LeaderRobot run method is called" << std::endl;
+        bool running = true;
         
-        while (step(TIME_STEP) != -1) {
+        while (step(TIME_STEP) != -1 && running) {
         //std::cout << "LeaderRobot run method is called" << std::endl;                
-            scanEnvironmentAndDetectOOIs();        
+            running = scanEnvironmentAndDetectOOIs(); 
+          //std::cout << "Running: " << running << std::endl;
+          outputGPSPosition();
+          
+          if (!running)
+          {
+                  //outputGPSPosition();
+          }
+                   
         }
 
 
@@ -90,58 +112,66 @@ private:
     Lidar *lidar;
     Motor *frontLeftMotor, *frontRightMotor, *rearLeftMotor, *rearRightMotor;
     std::set<std::pair<double, double>> dispatchedOOIs;  // To track dispatched OOIs
+    webots::GPS *gps;
+    webots::Compass *compass;
+    double currentPositionX;
+    double currentPositionY;
+    double currentYaw;
 
 
-void scanEnvironmentAndDetectOOIs() {
+void outputGPSPosition() {
+        const double *gpsValues = gps->getValues();
+        std::cout << "GPS Position: X = " << gpsValues[0]
+                  << ", Y = " << gpsValues[1]
+                  << ", Z = " << gpsValues[2] << std::endl;
+    }
+    
+    
+bool scanEnvironmentAndDetectOOIs() {
     const float *lidarValues = lidar->getRangeImage();
     int numberOfPoints = lidar->getNumberOfPoints();
     double fieldOfView = lidar->getFov();
     double angleIncrement = fieldOfView / numberOfPoints;
 
-    std::vector<std::pair<double, double>> points;
+    updateCurrentPosition();  // Update GPS and compass data
+
     for (int i = 0; i < numberOfPoints; ++i) {
         float range = lidarValues[i];
-        if (range < 0.3) {
+        if (range < 0.3) {  // Object within range
             double angle = -fieldOfView / 2 + i * angleIncrement;
-            points.push_back({range * cos(angle), range * sin(angle)});
+            double relativeX = range * cos(angle);
+            double relativeY = range * sin(angle);
+
+            // Convert to absolute coordinates
+            double absoluteX = currentPositionX + relativeX * cos(currentYaw) - relativeY * sin(currentYaw);
+            double absoluteY = currentPositionY + relativeX * sin(currentYaw) + relativeY * cos(currentYaw);
+
+            if (dispatchedOOIs.find({absoluteX, absoluteY}) == dispatchedOOIs.end()) {
+                std::string scoutID = "1";  // Determine the appropriate Scout ID
+                //sendMessage(scoutID, std::to_string(absoluteX), std::to_string(absoluteY));
+              sendMessage(scoutID, std::to_string(currentPositionX), std::to_string(currentPositionY));
+
+                dispatchedOOIs.insert({absoluteX, absoluteY});  // Mark as dispatched
+                std::cout << "OOI at absolute position X: " << absoluteX << ", Y: " << absoluteY << " dispatched to Scout " << scoutID << std::endl;
+
+                stop();
+                return false;
+            }
         }
     }
-
-    // Basic clustering
-    std::vector<std::pair<double, double>> oois;
-    double clusterThreshold = 10; // Threshold to consider points in the same cluster
-    for (std::vector<std::pair<double, double>>::size_type i = 0; i < points.size(); ++i) {
-        if (i == 0 || (sqrt(pow(points[i].first - points[i-1].first, 2) + 
-                          pow(points[i].second - points[i-1].second, 2)) > clusterThreshold)) {
-            oois.push_back(points[i]);
-        }
-    }
-
-
- for (const auto& ooi : oois) {
-        // Check if this OOI has already been dispatched
-        if (dispatchedOOIs.find(ooi) == dispatchedOOIs.end()) {
-            // OOI not yet dispatched, send message
-            double targetX = ooi.first;
-            double targetY = ooi.second;
-            std::string scoutID = "1";
-
-            sendMessage(scoutID, std::to_string(targetX), std::to_string(targetY));
-            dispatchedOOIs.insert(ooi);  // Mark this OOI as dispatched
-            std::cout << "Calling STOP." << std::endl;
-    
-            stop();
-            
-            
-            
-            break;
-                
-        }
-    }
-    
+    return true;
 }
 
+void updateCurrentPosition() {
+    const double *gpsValues = gps->getValues();
+    currentPositionX = gpsValues[0];
+    currentPositionY = gpsValues[1];  // Depending on your coordinate system, this might be gpsValues[1]
 
+    const double *compassValues = compass->getValues();
+    currentYaw = atan2(compassValues[0], compassValues[1]);
+
+    std::cout << "Current position updated: X = " << currentPositionX << ", Y = " << currentPositionY << ", Yaw = " << currentYaw << std::endl;
+}
 
 
 };

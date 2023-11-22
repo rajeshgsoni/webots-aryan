@@ -33,7 +33,7 @@ public:
                 std::cout << "Moving to target X: " << targetX << ", Y: " << targetY << std::endl;
 
                 // Move to target, assuming a stop distance (adjust as needed)
-                double stopDistance = 0.5;  // Example stop distance
+                double stopDistance = 3;  // Example stop distance
                 if (moveToTarget(targetX, targetY, stopDistance)) {
                     std::cout << "Reached target." << std::endl;
                 }
@@ -59,49 +59,21 @@ bool moveToTarget(double targetX, double targetY, double stopDistance) {
 
     double deltaX = targetX - currentPositionX;
     double deltaY = targetY - currentPositionY;
-    //double distanceToTarget = sqrt(deltaX * deltaX + deltaY * deltaY);
+    double distanceToTarget = sqrt(deltaX * deltaX + deltaY * deltaY);
 
-    /*
+
     if (distanceToTarget <= stopDistance) {
        std::cout << "Stopping movement" << std::endl;
         //stopMovement();  // Stops the robot
         return true;     // Target reached
     }
-    */
 
     double angleToTarget = atan2(deltaY, deltaX);
     moveTowards(angleToTarget);
-    std::cout << "Moving towards " << std::endl;    
+    std::cout << "Moving towards angleToTarget " << angleToTarget << ", distanceToTarget " << distanceToTarget  << std::endl;    
 
     return false;  // Target not yet reached
 }
-
-void demonstrateMovement() {
-    std::cout << "Demonstrating movement." << std::endl;
-
-    // Simple forward movement for demonstration
-    auto leftMotor = getMotor("left wheel motor");
-    auto rightMotor = getMotor("right wheel motor");
-    leftMotor->setPosition(INFINITY);
-    rightMotor->setPosition(INFINITY);
-    leftMotor->setVelocity(5.0);  // Example speed
-    rightMotor->setVelocity(5.0); // Example speed
-
-    // Move for a certain number of steps
-    for (int i = 0; i < 100; ++i) {
-        if (step(TIME_STEP) == -1) {
-            break;
-        }
-        //updateCurrentPosition();
-        std::cout << "Current position: X = " << currentPositionX << ", Y = " << currentPositionY << std::endl;
-    }
-
-    // Stop the robot
-    leftMotor->setVelocity(0.0);
-    rightMotor->setVelocity(0.0);
-    std::cout << "Movement demonstration complete." << std::endl;
-}
-
 
 void moveTowards(double angle) {
     std::cout << "Inside moveTowards() with angle: " << angle << std::endl;    
@@ -109,7 +81,7 @@ void moveTowards(double angle) {
     auto leftMotor = getMotor("left wheel motor");
     auto rightMotor = getMotor("right wheel motor");
 
-    double baseSpeed = 5.0;  // Increase base speed
+    double baseSpeed = 5;  // Increase base speed
     double leftSpeed = baseSpeed;
     double rightSpeed = baseSpeed;
 
@@ -129,31 +101,6 @@ void moveTowards(double angle) {
 }
 
 private:
-/*
-void receiveCommandsFromLeader() {
-    if (receiver->getQueueLength() > 0) {
-        const char *data = (const char *)receiver->getData();
-        std::string receivedData(data);
-        receiver->nextPacket();
-
-        std::istringstream iss(receivedData);
-        std::string targetScoutID, targetX, targetY;
-        if (std::getline(iss, targetScoutID, '|') &&
-            std::getline(iss, targetX, '|') &&
-            std::getline(iss, targetY, '|')) {
-
-            if (targetScoutID == this->ID) {
-                std::cout << "Received command for this Scout. X: " << targetX << ", Y: " << targetY << std::endl;
-                // Process the command, move towards the target, etc.
-            } else {
-                std::cout << "Command for another Scout. Ignored." << std::endl;
-            }
-        }
-    }
-}
-  */
-  
-
   
    void move(double speed) override {
         // Implementation of the move method specific to LeaderRobot
