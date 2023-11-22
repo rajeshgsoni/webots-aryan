@@ -22,9 +22,17 @@ public:
     compass = getCompass("compass");
     compass->enable(TIME_STEP);
 
-        
+    camera = getCamera("camera");
+    camera->recognitionEnable(TIME_STEP);
+       
         
     }
+
+
+bool checkForGreenOOI() {
+    int recognizedObjects = camera->getRecognitionNumberOfObjects();
+    return recognizedObjects > 0;  // Assuming green OOI returns 1 and red returns 0
+}
 
     void run() {
     
@@ -33,6 +41,9 @@ public:
 
         while (step(TIME_STEP) != -1) {
         auto message = receiveMessage();  // Capture the message from Leader
+        
+    
+                
         if (!message.first.empty() && !message.second.empty()) {
             try {
                 // Parse target coordinates
@@ -55,8 +66,15 @@ public:
             }
         }
         
-        outputGPSPosition();
-        moveToTarget(targetPositionX, targetPositionY, stopDistance);
+        if (checkForGreenOOI()) {
+            std::cout << "Green OOI detected." << std::endl;
+              sendMessage("0", "10", "10");
+              //break;
+              //return ;
+        }
+        
+        //outputGPSPosition();
+        //moveToTarget(targetPositionX, targetPositionY, stopDistance);
 
         // Add additional tasks or methods to explore and report
         // exploreAndReport();
@@ -117,7 +135,8 @@ void moveTowards(double angle) {
 }
 
 private:
-  
+      webots::Camera *camera;
+
    void move(double speed) override {
         // Implementation of the move method specific to LeaderRobot
     }

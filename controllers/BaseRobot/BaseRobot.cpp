@@ -24,7 +24,7 @@ BaseRobot::~BaseRobot(){
 void BaseRobot::updateCurrentPosition() {
     const double *gpsValues = gps->getValues();
     currentPositionX = gpsValues[0];
-    currentPositionY = gpsValues[2];  // Adjust based on your coordinate system
+    currentPositionY = gpsValues[1];  // Adjust based on your coordinate system
 
     const double *compassValues = compass->getValues();
     currentYaw = atan2(compassValues[0], compassValues[1]);
