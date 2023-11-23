@@ -161,7 +161,7 @@ void keyboardControl()
         frontLeftMotor = getMotor("front left wheel motor");
         frontRightMotor = getMotor("front right wheel motor");
 
-    std::cout << "keyboardControl" << std::endl;   
+    //std::cout << "keyboardControl" << std::endl;   
         char const key = static_cast<char>(keyboard.getKey());
         std::cout << key << std::endl;
         switch (key) {
@@ -172,22 +172,22 @@ void keyboardControl()
                 
                 break;
             case 'A':
-                // turnLeft(&leftMotor, &rightMotor);
+                turnLeft(frontLeftMotor, frontRightMotor);
                 std::cout << "A" << std::endl;   
                 
                 break;
             case 'S':
-                //moveBackwards(&leftMotor, &rightMotor);
+                moveBackwards(frontLeftMotor, frontRightMotor);
                 std::cout << "S" << std::endl;   
                 
                 break;
             case 'D':
-                //turnRight(&leftMotor, &rightMotor);
+                turnRight(frontLeftMotor, frontRightMotor);
                 std::cout << "D" << std::endl;   
                 
                 break;
             case ' ':
-                //halt(&leftMotor, &rightMotor);
+                halt(frontLeftMotor, frontRightMotor);
                 std::cout << "..." << std::endl;   
                 
                 break;
