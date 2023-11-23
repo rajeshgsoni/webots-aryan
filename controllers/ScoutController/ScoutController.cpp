@@ -42,7 +42,8 @@ bool checkForGreenOOI() {
         while (step(TIME_STEP) != -1) {
         auto message = receiveMessage();  // Capture the message from Leader
         
-    
+                    updateCurrentPosition();
+
                 
         if (!message.first.empty() && !message.second.empty()) {
             try {

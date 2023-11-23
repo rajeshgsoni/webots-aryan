@@ -1,0 +1,40 @@
+make clean
+Clean finished.
+make -j 8
+# updating ScoutController.d
+# updating BaseRobot.d
+# compiling ScoutController.cpp
+# compiling BaseRobot.cpp
+# linking ScoutController.exe
+#@rm -f ScoutController.exe > /dev/null 2>&1 && echo "# copying to" ScoutController.exe && cp build/release/ScoutController.exe ScoutController.exe > /dev/null 2>&1
+INFO: LeaderRobot: Starting controller: "G:\My Drive\Deep\Business\Projects\Webots - Aryan Jain Nov 2023\webots-Rtanaryan-master\controllers\LeaderRobot\LeaderRobot.exe"
+INFO: ScoutController: Starting controller: "G:\My Drive\Deep\Business\Projects\Webots - Aryan Jain Nov 2023\webots-Rtanaryan-master\controllers\ScoutController\ScoutController.exe"
+INFO: ScoutController: Starting controller: "G:\My Drive\Deep\Business\Projects\Webots - Aryan Jain Nov 2023\webots-Rtanaryan-master\controllers\ScoutController\ScoutController.exe"
+GPS Position: X = nan, Y = nan, Z = nan
+LeaderRobot run method is called
+GPS Position: X = nan, Y = nan, Z = nan
+ScoutRobot run
+GPS Position: X = nan, Y = nan, Z = nan
+ScoutRobot run
+Current position: X = 3.02708, Y = 2.2043, Yaw = -0.0076041
+Current position: X = 1.13065, Y = 0.70836, Yaw = 1.5708
+Current position: X = 0.5, Y = -1.20846e-11, Yaw = -0.2
+Current position: X = 3.0819, Y = 2.20313, Yaw = -0.0183511
+Sending message to 1
+OOI at absolute position X: 2.14314, Y: 2.20313 dispatched to Scout 1
+Stopping all motors.
+All motors stopped.
+Current position: X = 1.13065, Y = 0.70836, Yaw = 1.5708
+Current position: X = 0.5, Y = -7.21256e-12, Yaw = -0.2
+Received message with matching ID: 1|3.081904|2.203133
+Current position: X = 1.13065, Y = 0.70836, Yaw = 1.5708
+Moving to target X: 3.0819, Y: 2.20313
+ScoutRobot moveToTarget
+Current position: X = 1.13065, Y = 0.70836, Yaw = 1.5708
+deltaX1.95125, deltaY 1.49477 distanceToTarget 2.45799
+Inside moveTowards() with angle: 0.653699
+Moving towards deltaX1.95125, deltaY 1.49477 angleToTarget 0.653699, distanceToTarget 2.45799
+Current position: X = 0.5, Y = -4.15733e-12, Yaw = -0.2
+Current position: X = 1.13065, Y = 0.71476, Yaw = 1.5708
+Current position: X = 0.5, Y = -2.25503e-12, Yaw = -0.2
+Current position: X = 1.13065, Y = 0.72116, Yaw = 1.5708
