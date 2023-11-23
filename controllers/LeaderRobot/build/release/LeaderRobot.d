@@ -11,4 +11,5 @@ build/release/LeaderRobot.o: LeaderRobot.cpp \
  C:\Users\rajes\AppData\Local\Programs\Webots/include/controller/cpp/webots/GPS.hpp \
  C:\Users\rajes\AppData\Local\Programs\Webots/include/controller/cpp/webots/Compass.hpp \
  C:\Users\rajes\AppData\Local\Programs\Webots/include/controller/cpp/webots/Display.hpp \
- C:\Users\rajes\AppData\Local\Programs\Webots/include/controller/cpp/webots/ImageRef.hpp
+ C:\Users\rajes\AppData\Local\Programs\Webots/include/controller/cpp/webots/ImageRef.hpp \
+ C:\Users\rajes\AppData\Local\Programs\Webots/include/controller/cpp/webots/Keyboard.hpp

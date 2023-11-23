@@ -9,6 +9,7 @@
 #include <webots/GPS.hpp>
 #include <webots/Compass.hpp>
 #include <webots/Display.hpp>
+#include<webots/Keyboard.hpp>
 
 using namespace webots;
 
@@ -16,6 +17,7 @@ class LeaderRobot : public BaseRobot {
     static constexpr int TIME_STEP = 64; // Adjust this value as needed for your simulation
   webots::Emitter *emitter;
     webots::Display *display;
+    webots::Keyboard keyboard;
 
 public:
 
@@ -27,6 +29,7 @@ public:
         gps = getGPS("gps");
         gps->enable(TIME_STEP);
         outputGPSPosition();
+    keyboard.enable(TIME_STEP);
 
 
     compass = getCompass("compass");
@@ -44,6 +47,7 @@ public:
         rearRightMotor->setPosition(INFINITY);
     }
     
+    
 void logEvent(const std::string& message) {
     std::ofstream outputFile;
     outputFile.open("output.txt", std::ios::app); // Open in append mode
@@ -57,9 +61,42 @@ void logEvent(const std::string& message) {
     }
 }
     
-bool moveToTarget(double targetX, double targetY, double stopDistance) {
-    // updateCurrentPosition();  // Assuming this function updates currentPositionX and currentPositionY
+double calculateDistance(double x1, double y1, double x2, double y2) {
+    return std::sqrt(std::pow(x2 - x1, 2) + std::pow(y2 - y1, 2));
+}
     
+ 
+bool moveToTarget(double stopDistance) {
+
+    double distanceToTarget = calculateDistance(currentPositionX, currentPositionY, targetPositionX, targetPositionY);
+    
+    std::cout << "................moveToTarget distanceToTarget: " << distanceToTarget << " stopDistance: " << stopDistance  << std::endl; 
+
+    if (distanceToTarget <= stopDistance) {
+        move(0.0);
+        rotate(0.0);
+        return true;
+    }
+
+    double angleToTarget = atan2(targetPositionY - currentPositionY, targetPositionX - currentPositionX);
+    double angleDifference = angleToTarget - currentYaw;
+
+    while (angleDifference > M_PI) {
+        angleDifference -= 2.0 * M_PI;
+    }
+
+    while (angleDifference <= -M_PI) {
+        angleDifference += 2.0 * M_PI;
+    }
+
+    move(1.0);  // Adjust speed as needed
+    rotate(angleDifference);  // Adjust rotation speed as needed
+
+    return false;
+ 
+
+    // updateCurrentPosition();  // Assuming this function updates currentPositionX and currentPositionY
+    /*
    std::cout << "LeaderRobot moveToTarget" << std::endl;
     updateCurrentPosition();  // Update GPS and compass data
 
@@ -80,6 +117,8 @@ bool moveToTarget(double targetX, double targetY, double stopDistance) {
     std::cout << "Moving towards deltaX" << deltaX << ", deltaY " << deltaY << " angleToTarget " << angleToTarget << ", distanceToTarget " << distanceToTarget  << std::endl;    
 
     return false;  // Target not yet reached
+    */
+    
 }
 
 void moveTowards(double angle) {
@@ -117,6 +156,48 @@ void moveTowards(double angle) {
 
 }
 
+void keyboardControl()
+{
+        frontLeftMotor = getMotor("front left wheel motor");
+        frontRightMotor = getMotor("front right wheel motor");
+
+    std::cout << "keyboardControl" << std::endl;   
+        char const key = static_cast<char>(keyboard.getKey());
+        std::cout << key << std::endl;
+        switch (key) {
+            case 'W':
+                moveForwards(frontLeftMotor, frontRightMotor);
+                std::cout << "W" << std::endl;   
+                
+                
+                break;
+            case 'A':
+                // turnLeft(&leftMotor, &rightMotor);
+                std::cout << "A" << std::endl;   
+                
+                break;
+            case 'S':
+                //moveBackwards(&leftMotor, &rightMotor);
+                std::cout << "S" << std::endl;   
+                
+                break;
+            case 'D':
+                //turnRight(&leftMotor, &rightMotor);
+                std::cout << "D" << std::endl;   
+                
+                break;
+            case ' ':
+                //halt(&leftMotor, &rightMotor);
+                std::cout << "..." << std::endl;   
+                
+                break;
+                
+            default:
+            //halt(&leftMotor, &rightMotor);
+            break;
+        }
+     
+}
 
     void run() {
         
@@ -127,6 +208,8 @@ void moveTowards(double angle) {
         
         while (step(TIME_STEP) != -1) {
         
+        keyboardControl();
+       
         auto message = receiveMessage();  // Capture the message from Leader
         
         if (!message.first.empty() && !message.second.empty()) {
@@ -138,9 +221,11 @@ void moveTowards(double angle) {
                 targetPositionX = targetX;
                 targetPositionY = targetY;
                 std::cout << "GREEN OOI target X: " << targetX << ", Y: " << targetY << std::endl;
+                
+                updateCurrentPosition();
 
                 stopDistance = 1;  // Example stop distance
-                if (moveToTarget(targetX, targetY, stopDistance)) {
+                if (moveToTarget(stopDistance)) {
                     std::cout << "Reached target." << std::endl;
                 }
             } catch (const std::invalid_argument& e) {
@@ -152,15 +237,12 @@ void moveTowards(double angle) {
         
         //std::cout << "LeaderRobot run method is called" << std::endl;  
         if(running){              
-            running = scanEnvironmentAndDetectOOIs(); 
+            //running = scanEnvironmentAndDetectOOIs(); 
             }
           //std::cout << "Running: " << running << std::endl;
           //outputGPSPosition();
           
-          if (!running)
-          {
-                  //outputGPSPosition();
-          }
+         
                    
         }
 
@@ -193,6 +275,31 @@ void moveTowards(double angle) {
     std::cout << "All motors stopped." << std::endl;
 }
 
+
+void moveForwards(webots::Motor* leftMotor, webots::Motor* rightMotor) {
+    leftMotor->setVelocity(5.0);  // Set desired speed
+    rightMotor->setVelocity(5.0); // Set desired speed
+}
+
+void moveBackwards(webots::Motor* leftMotor, webots::Motor* rightMotor) {
+    leftMotor->setVelocity(-5.0);  // Set desired speed
+    rightMotor->setVelocity(-5.0); // Set desired speed
+}
+
+void turnLeft(webots::Motor* leftMotor, webots::Motor* rightMotor) {
+    leftMotor->setVelocity(-3.0);  // Set desired speed
+    rightMotor->setVelocity(3.0); // Set desired speed
+}
+
+void turnRight(webots::Motor* leftMotor, webots::Motor* rightMotor) {
+    leftMotor->setVelocity(3.0);  // Set desired speed
+    rightMotor->setVelocity(-3.0); // Set desired speed
+}
+
+void halt(webots::Motor* leftMotor, webots::Motor* rightMotor) {
+    leftMotor->setVelocity(0.0);  // Stop
+    rightMotor->setVelocity(0.0); // Stop
+}
 
 private:
     Lidar *lidar;
@@ -251,3 +358,4 @@ int main(int argc, char **argv) {
     leader.run();
     return 0;
 }
+

@@ -149,6 +149,6 @@ private:
 
 int main(int argc, char **argv) {
     ScoutRobot scout;
-    scout.run();
+    //scout.run();
     return 0;
 }
