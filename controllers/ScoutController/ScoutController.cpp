@@ -125,13 +125,19 @@ void moveTowards(double angle) {
         leftSpeed *= (1 - fabs(angle) / M_PI);   // Reduce left speed to turn right
     }
 
-    std::cout << "Setting velocity leftSpeed:" << leftSpeed << ", rightSpeed:" << rightSpeed << std::endl;    
+    //std::cout << "Setting velocity leftSpeed:" << leftSpeed << ", rightSpeed:" << rightSpeed << std::endl;    
 
     leftMotor->setPosition(INFINITY);
     rightMotor->setPosition(INFINITY);
 
+    leftMotor->setVelocity(baseSpeed);
+    rightMotor->setVelocity(baseSpeed);
+
+  /*    
     leftMotor->setVelocity(leftSpeed);
     rightMotor->setVelocity(rightSpeed);
+    */
+    
 }
 
 private:
@@ -149,6 +155,6 @@ private:
 
 int main(int argc, char **argv) {
     ScoutRobot scout;
-    //scout.run();
+    scout.run();
     return 0;
 }

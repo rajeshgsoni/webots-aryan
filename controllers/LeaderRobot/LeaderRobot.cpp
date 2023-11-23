@@ -161,9 +161,10 @@ void keyboardControl()
         frontLeftMotor = getMotor("front left wheel motor");
         frontRightMotor = getMotor("front right wheel motor");
 
+
     //std::cout << "keyboardControl" << std::endl;   
         char const key = static_cast<char>(keyboard.getKey());
-        std::cout << key << std::endl;
+        //std::cout << key << std::endl;
         switch (key) {
             case 'W':
                 moveForwards(frontLeftMotor, frontRightMotor);
@@ -237,7 +238,7 @@ void keyboardControl()
         
         //std::cout << "LeaderRobot run method is called" << std::endl;  
         if(running){              
-            //running = scanEnvironmentAndDetectOOIs(); 
+            running = scanEnvironmentAndDetectOOIs(); 
             }
           //std::cout << "Running: " << running << std::endl;
           //outputGPSPosition();
@@ -276,22 +277,37 @@ void keyboardControl()
 }
 
 
+
+
 void moveForwards(webots::Motor* leftMotor, webots::Motor* rightMotor) {
+
+    leftMotor->setPosition(INFINITY);
+    rightMotor->setPosition(INFINITY);
+
     leftMotor->setVelocity(5.0);  // Set desired speed
     rightMotor->setVelocity(5.0); // Set desired speed
 }
 
 void moveBackwards(webots::Motor* leftMotor, webots::Motor* rightMotor) {
-    leftMotor->setVelocity(-5.0);  // Set desired speed
-    rightMotor->setVelocity(-5.0); // Set desired speed
+    leftMotor->setPosition(INFINITY);
+    rightMotor->setPosition(INFINITY);
+
+    leftMotor->setVelocity(-3.0);  // Set desired speed
+    rightMotor->setVelocity(-3.0); // Set desired speed
 }
 
 void turnLeft(webots::Motor* leftMotor, webots::Motor* rightMotor) {
+    leftMotor->setPosition(INFINITY);
+    rightMotor->setPosition(INFINITY);
+
     leftMotor->setVelocity(-3.0);  // Set desired speed
     rightMotor->setVelocity(3.0); // Set desired speed
 }
 
 void turnRight(webots::Motor* leftMotor, webots::Motor* rightMotor) {
+    leftMotor->setPosition(INFINITY);
+    rightMotor->setPosition(INFINITY);
+
     leftMotor->setVelocity(3.0);  // Set desired speed
     rightMotor->setVelocity(-3.0); // Set desired speed
 }
