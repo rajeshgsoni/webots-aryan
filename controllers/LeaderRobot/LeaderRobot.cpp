@@ -10,6 +10,7 @@
 #include <webots/Compass.hpp>
 #include <webots/Display.hpp>
 #include<webots/Keyboard.hpp>
+#include <sstream>
 
 using namespace webots;
 
@@ -18,6 +19,7 @@ class LeaderRobot : public BaseRobot {
   webots::Emitter *emitter;
     webots::Display *display;
     webots::Keyboard keyboard;
+    bool keyboardControlEnabled;
 
 public:
 
@@ -45,6 +47,30 @@ public:
         frontRightMotor->setPosition(INFINITY);
         rearLeftMotor->setPosition(INFINITY);
         rearRightMotor->setPosition(INFINITY);
+        
+        
+// Initialize the flag
+        keyboardControlEnabled = false;
+
+        std::ifstream keyboardConfigFile("keyboardConfig.txt");
+        if (keyboardConfigFile.is_open()) {
+            std::string line;
+            while (getline(keyboardConfigFile, line)) {
+                if (line.find("keyboardControl=") != std::string::npos) {
+                    std::istringstream iss(line.substr(line.find("=") + 1));
+                    std::string value;
+                    if (iss >> value) {
+                        keyboardControlEnabled = (value == "True" || value == "true");
+                    }
+                }
+            }
+            keyboardConfigFile.close();
+        } else {
+            std::cerr << "Unable to open keyboardConfig.txt" << std::endl;
+        }    
+        
+        std::cout << "keyboardControlEnabled: " << keyboardControlEnabled << std::endl;
+    
     }
     
     
@@ -158,6 +184,15 @@ void moveTowards(double angle) {
 
 void keyboardControl()
 {
+
+if ( !keyboardControlEnabled)
+{
+std::cout << "keyboardControl disabled. returning " << std::endl;   
+return;
+}
+
+std::cout << "keyboardControl ENABLED." << std::endl;   
+
         frontLeftMotor = getMotor("front left wheel motor");
         frontRightMotor = getMotor("front right wheel motor");
 
@@ -366,7 +401,7 @@ bool scanEnvironmentAndDetectOOIs() {
 }
 
 
-
+fasd
 };
 
 int main(int argc, char **argv) {
